@@ -4,6 +4,7 @@ import './App.css'
 import Home from './pages/home'
 import { ChakraProvider } from '@chakra-ui/react'
 import theme from './libs/theme'
+import Agent from './pages/agent'
 
 function App() {
   return (
@@ -11,7 +12,8 @@ function App() {
       <ChakraProvider theme={theme}>
         <Layout>
           <Routes>
-            <Route exact path="/" element={<Home title="Home" />} />
+            <Route exact path="/test" element={<Home title="Home" />} />
+            <Route exact path="/" element={<Agent title="Agents" />} />
           </Routes>
         </Layout>
       </ChakraProvider>
