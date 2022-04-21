@@ -12,7 +12,8 @@ const VerticalSlider = ({ children, props }) => {
     infinite: true,
     slidesToScroll: 1,
     vertical: true,
-    verticalSwiping: true
+    verticalSwiping: true,
+    focusOnSelect: true
   }
   return (
     <Slider {...settings} {...props}>
@@ -23,6 +24,7 @@ const VerticalSlider = ({ children, props }) => {
 
 export default function Hero() {
   const agentName = css`
+    &.active,
     &:hover {
       color: #ff4655;
       .agent-name {
@@ -55,7 +57,14 @@ export default function Hero() {
 
   return (
     <Box position="relative" height="650px">
-      <Box position="absolute" top="0" left="0" height="100%" zIndex={-1}>
+      <Box
+        position="absolute"
+        top="0"
+        left="0"
+        width="100%"
+        height="100%"
+        zIndex={-1}
+      >
         <Image
           src="/images/agent-background-generic.JPG"
           width="100%"
@@ -63,10 +72,15 @@ export default function Hero() {
           objectFit="cover"
         />
       </Box>
-      <Container maxW="container.lg" height="100%" display="flex">
+      <Container
+        maxW="container.xl"
+        height="100%"
+        display="flex"
+        justifyContent="space-between"
+      >
         <Box id="agent-scroll" height="100%" width="60%">
           <VerticalSlider>
-            {listAgents.map((item, idx) => {
+            {listAgents.map((agent, idx) => {
               const agentOrder = idx + 1
               return (
                 <Box
@@ -75,10 +89,10 @@ export default function Hero() {
                   color="#ece8e1"
                   userSelect="none"
                   cursor="pointer"
-                  onClick={() => setPrimaryAgent(item)}
-                  className="ageent-wrapper"
+                  onClick={() => setPrimaryAgent(agent)}
+                  className={agent.uuid === primaryAgent.uuid ? 'active' : ''}
                   css={agentName}
-                  key={item.uuid}
+                  key={agent.uuid}
                 >
                   <Text
                     as="p"
@@ -98,7 +112,7 @@ export default function Hero() {
                     className="agent-name"
                     textTransform="uppercase"
                   >
-                    {item.displayName}
+                    {agent.displayName}
                   </Text>
                 </Box>
               )
@@ -107,37 +121,69 @@ export default function Hero() {
         </Box>
         <Box
           position="absolute"
-          width="100%"
+          width="60%"
           height="120%"
-          top="50%"
-          left="55%"
-          mt="2rem"
           zIndex={1}
           pointerEvents="none"
-          transform="translate(-50%, -50%)"
+          userSelect="none"
+          transform="translate(25%, 0)"
+          display="flex"
+          overflow="visible"
         >
           {primaryAgent && (
-            <Image src={primaryAgent.fullPortraitV2} height="100%" m="0 auto" />
+            <>
+              <Image
+                src={primaryAgent.fullPortraitV2}
+                width="100%"
+                objectFit="cover"
+              />
+              <Box
+                className="agent-description"
+                width="40%"
+                display="flex"
+                flexDirection="column"
+                position="relative"
+              >
+                <Box
+                  className="agent-description-wrapper"
+                  position="absolute"
+                  top="25%"
+                >
+                  <Box className="agent-role" height>
+                    <Text as="h3" fontWeight="500">
+                      //ROLE
+                    </Text>
+                    <Box display="flex" mt={4}>
+                      <Text
+                        as="p"
+                        textTransform="uppercase"
+                        fontWeight="500"
+                        fontSize="2.5rem"
+                        fontFamily="Anton"
+                        lineHeight="1"
+                      >
+                        {primaryAgent.role.displayName}
+                      </Text>
+                      <Image
+                        src={primaryAgent.role.displayIcon}
+                        width="40px"
+                        height="40px"
+                        ml={2}
+                      />
+                    </Box>
+                  </Box>
+                  <Box className="agent-biography" mt={10}>
+                    <Text as="h3" fontWeight="500">
+                      //BIOGRAPHY
+                    </Text>
+                    <Text as="p" mt={4}>
+                      {primaryAgent.description}
+                    </Text>
+                  </Box>
+                </Box>
+              </Box>
+            </>
           )}
-        </Box>
-        <Box className="agent-description">
-          <Box>
-            <Text as="h3">ROLE</Text>
-            <Text
-              as="p"
-              textTransform="uppercase"
-              fontWeight="500"
-              fontSize="2.5rem"
-              fontFamily="Anton"
-            >
-              {primaryAgent.role.displayName}
-            </Text>
-            <Image src={primaryAgent.role.displayIcon} />
-          </Box>
-          <Box mt={4}>
-            <Text as="h3">BIOGRAPY</Text>
-            <Text as="p">{primaryAgent.description}</Text>
-          </Box>
         </Box>
       </Container>
     </Box>
