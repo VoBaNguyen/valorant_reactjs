@@ -1,8 +1,16 @@
-import { Box, Image, Container, Text, Heading } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
+import { Box, Image, Container, Text } from '@chakra-ui/react'
 import Slider from 'react-slick'
 import { css } from '@emotion/react'
-import axiois from 'axios'
+
+const AgentPortrait = ({ primaryAgent, props }) => {
+  return (
+    <Image
+      src={primaryAgent.fullPortraitV2}
+      height="100%"
+      objectFit="contain"
+    />
+  )
+}
 
 const VerticalSlider = ({ children, props }) => {
   const settings = {
@@ -22,7 +30,7 @@ const VerticalSlider = ({ children, props }) => {
   )
 }
 
-export default function Hero() {
+export default function Hero({ primaryAgent, setPrimaryAgent, listAgents }) {
   const agentName = css`
     &.active,
     &:hover {
@@ -33,30 +41,9 @@ export default function Hero() {
       }
     }
   `
-  const [primaryAgent, setPrimaryAgent] = useState()
-  const [listAgents, setAgentData] = useState([])
-
-  useEffect(() => {
-    const agentAPI = 'https://valorant-api.com/v1/agents'
-    axiois({
-      method: 'GET',
-      url: agentAPI
-    })
-      .then(res => {
-        console.log(res.data)
-        const filteredData = res.data.data.filter(
-          tmpAgent => tmpAgent.uuid != 'ded3520f-4264-bfed-162d-b080e2abccf9'
-        )
-        console.log('filteredData: ', filteredData)
-        setAgentData(filteredData)
-        setPrimaryAgent(filteredData[0])
-        console.log(listAgents)
-      })
-      .catch(err => console.log(err))
-  }, [])
 
   return (
-    <Box position="relative" height="650px">
+    <Box position="relative" height="670px">
       <Box
         position="absolute"
         top="0"
@@ -132,14 +119,10 @@ export default function Hero() {
         >
           {primaryAgent && (
             <>
-              <Image
-                src={primaryAgent.fullPortraitV2}
-                width="100%"
-                objectFit="cover"
-              />
+              <AgentPortrait primaryAgent={primaryAgent} />
               <Box
                 className="agent-description"
-                width="40%"
+                minW="300px"
                 display="flex"
                 flexDirection="column"
                 position="relative"
@@ -151,7 +134,7 @@ export default function Hero() {
                 >
                   <Box className="agent-role" height>
                     <Text as="h3" fontWeight="500">
-                      //ROLE
+                      {'//ROLE'}
                     </Text>
                     <Box display="flex" mt={4}>
                       <Text
@@ -174,7 +157,7 @@ export default function Hero() {
                   </Box>
                   <Box className="agent-biography" mt={10}>
                     <Text as="h3" fontWeight="500">
-                      //BIOGRAPHY
+                      {'//BIOGRAPHY'}
                     </Text>
                     <Text as="p" mt={4}>
                       {primaryAgent.description}
