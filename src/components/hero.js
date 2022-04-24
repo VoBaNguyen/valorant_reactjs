@@ -4,11 +4,70 @@ import { css } from '@emotion/react'
 
 const AgentPortrait = ({ primaryAgent, props }) => {
   return (
-    <Image
-      src={primaryAgent.fullPortraitV2}
+    <Box
+      position="absolute"
+      height="110%"
+      zIndex={1}
+      left="50%"
+      transform="translate(-50%, 0)"
+      pointerEvents="none"
+      userSelect="none"
+      margin="0 auto"
+      // overflow="visible"
+    >
+      <Image
+        src={primaryAgent.fullPortraitV2}
+        height="100%"
+        objectFit="cover"
+      />
+    </Box>
+  )
+}
+
+const AgentDescr = ({ primaryAgent }) => {
+  return (
+    <Box
+      className="agent-description"
+      position="absolute"
+      minW="300px"
+      right="0"
       height="100%"
-      objectFit="contain"
-    />
+      zIndex={10}
+    >
+      <Box className="agent-description-wrapper" position="absolute" top="25%">
+        <Box className="agent-role" height>
+          <Text as="h3" fontWeight="500">
+            {'//ROLE'}
+          </Text>
+          <Box display="flex" mt={4}>
+            <Text
+              as="p"
+              textTransform="uppercase"
+              fontWeight="500"
+              fontSize="2.5rem"
+              fontFamily="Anton"
+              lineHeight="1"
+            >
+              {primaryAgent.role.displayName}
+            </Text>
+            <Image
+              src={primaryAgent.role.displayIcon}
+              width="40px"
+              height="40px"
+              ml={2}
+            />
+          </Box>
+        </Box>
+        <Box className="agent-biography" mt={10}>
+          <Text as="h3" fontWeight="500">
+            {'//BIOGRAPHY'}
+          </Text>
+          <Text as="p" mt={4} textAlign="justify">
+            {primaryAgent.description}
+          </Text>
+        </Box>
+      </Box>
+    </Box>
   )
 }
 
@@ -43,7 +102,12 @@ export default function Hero({ primaryAgent, setPrimaryAgent, listAgents }) {
   `
 
   return (
-    <Box position="relative" height="670px">
+    <Box
+      className="hero-wrapper"
+      position="relative"
+      height="670px"
+      // backgroundColor="red"
+    >
       <Box
         position="absolute"
         top="0"
@@ -52,20 +116,23 @@ export default function Hero({ primaryAgent, setPrimaryAgent, listAgents }) {
         height="100%"
         zIndex={-1}
       >
-        <Image
-          src="/images/agent-background-generic.JPG"
-          width="100%"
-          height="100%"
-          objectFit="cover"
-        />
+        <video
+          poster="/images/agent-background-generic.JPG"
+          autoplay="autoplay"
+          loop="true"
+          muted
+          style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+        >
+          <source src="/videos/agent-background-generic.mp4" type="video/mp4" />
+        </video>
       </Box>
       <Container
         maxW="container.xl"
         height="100%"
         display="flex"
-        justifyContent="space-between"
+        position="relative"
       >
-        <Box id="agent-scroll" height="100%" width="60%">
+        <Box id="agent-scroll" height="100%" width="100%">
           <VerticalSlider>
             {listAgents.map((agent, idx) => {
               const agentOrder = idx + 1
@@ -106,68 +173,8 @@ export default function Hero({ primaryAgent, setPrimaryAgent, listAgents }) {
             })}
           </VerticalSlider>
         </Box>
-        <Box
-          position="absolute"
-          width="60%"
-          height="120%"
-          zIndex={1}
-          pointerEvents="none"
-          userSelect="none"
-          transform="translate(25%, 0)"
-          display="flex"
-          overflow="visible"
-        >
-          {primaryAgent && (
-            <>
-              <AgentPortrait primaryAgent={primaryAgent} />
-              <Box
-                className="agent-description"
-                minW="300px"
-                display="flex"
-                flexDirection="column"
-                position="relative"
-              >
-                <Box
-                  className="agent-description-wrapper"
-                  position="absolute"
-                  top="25%"
-                >
-                  <Box className="agent-role" height>
-                    <Text as="h3" fontWeight="500">
-                      {'//ROLE'}
-                    </Text>
-                    <Box display="flex" mt={4}>
-                      <Text
-                        as="p"
-                        textTransform="uppercase"
-                        fontWeight="500"
-                        fontSize="2.5rem"
-                        fontFamily="Anton"
-                        lineHeight="1"
-                      >
-                        {primaryAgent.role.displayName}
-                      </Text>
-                      <Image
-                        src={primaryAgent.role.displayIcon}
-                        width="40px"
-                        height="40px"
-                        ml={2}
-                      />
-                    </Box>
-                  </Box>
-                  <Box className="agent-biography" mt={10}>
-                    <Text as="h3" fontWeight="500">
-                      {'//BIOGRAPHY'}
-                    </Text>
-                    <Text as="p" mt={4}>
-                      {primaryAgent.description}
-                    </Text>
-                  </Box>
-                </Box>
-              </Box>
-            </>
-          )}
-        </Box>
+        {primaryAgent && <AgentPortrait primaryAgent={primaryAgent} />}
+        {primaryAgent && <AgentDescr primaryAgent={primaryAgent} />}
       </Container>
     </Box>
   )

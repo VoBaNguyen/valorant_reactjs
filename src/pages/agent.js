@@ -3,17 +3,16 @@ import Ability from '../components/ability'
 import Hero from '../components/hero'
 import { useEffect, useState } from 'react'
 import axiois from 'axios'
+import RecentContent from '../components/recent-content'
 
 export default function Agent() {
   const [primaryAgent, setPrimaryAgent] = useState()
   const [listAgents, setAgentData] = useState([])
 
   useEffect(() => {
-    const agentAPI =
-      'https://valorant-api.com/v1/agents?isPlayableCharacter=true'
     axiois({
       method: 'GET',
-      url: agentAPI
+      url: 'https://valorant-api.com/v1/agents?isPlayableCharacter=true'
     })
       .then(res => {
         setAgentData(res.data.data)
@@ -30,6 +29,7 @@ export default function Agent() {
         listAgents={listAgents}
       />
       {primaryAgent && <Ability primaryAgent={primaryAgent} />}
+      <RecentContent />
     </>
   )
 }

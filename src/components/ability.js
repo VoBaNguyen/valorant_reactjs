@@ -3,12 +3,14 @@ import { css } from '@emotion/react'
 import React, { useEffect, useState } from 'react'
 
 export default function Ability({ primaryAgent }) {
+  console.log(primaryAgent.abilities)
   const [primaryAbility, setPrimaryAbility] = useState(
     primaryAgent.abilities[0]
   )
 
   const btnAfter = css`
     overflow: hidden;
+    background-color: #cec4b2;
     &::after {
       content: '';
       position: absolute;
@@ -19,30 +21,49 @@ export default function Ability({ primaryAgent }) {
       transition: all 0.4s ease;
       background-color: #ff4655;
     }
+
     &.active::after,
     &:hover::after {
       left: 0;
     }
 
-    img {
+    img,
+    h3 {
       transition: all 0.4s ease;
     }
+
     &.active,
     &:hover {
-      img {
+      img,
+      h3 {
         transform: scale(1.2, 1.2);
       }
     }
   `
 
-  useEffect(() => {}, [])
+  useEffect(() => {
+    console.log('Run useEffect ability')
+    setPrimaryAbility(primaryAgent.abilities[0])
+  }, [primaryAgent])
+
+  console.log(
+    'Outside return',
+    primaryAgent.displayName,
+    primaryAbility.displayName
+  )
 
   return (
-    <Container maxW="container.lg" mt={48}>
+    <Container maxW="container.lg" pt={36} borderLeft="solid black 1px">
       <Heading color="#111" fontFamily="Anton" letterSpacing="2px">
         SPECIAL ABILITIES
       </Heading>
-      <Box className="ability-container" ml={16} mt={8} maxW="600px">
+      <Box
+        className="ability-container"
+        ml={16}
+        mt={8}
+        maxW="600px"
+        minHeight="300px"
+      >
         <Box className="all-abilities" display="flex">
           {primaryAgent.abilities.map(ability => (
             <Button
@@ -59,8 +80,27 @@ export default function Ability({ primaryAgent }) {
                   ? 'active'
                   : ''
               }
+              key={ability.displayName}
+              _focus={{
+                boxShadow: 'none'
+              }}
             >
-              <Image src={ability.displayIcon} zIndex={1} alt={ability.slot} />
+              {ability.displayIcon ? (
+                <Image
+                  src={ability.displayIcon}
+                  zIndex={1}
+                  alt={ability.slot}
+                />
+              ) : (
+                <Text
+                  zIndex={1}
+                  as="h3"
+                  fontSize="1rem"
+                  textTransform="uppercase"
+                >
+                  {ability.slot}
+                </Text>
+              )}
             </Button>
           ))}
         </Box>
@@ -81,6 +121,7 @@ export default function Ability({ primaryAgent }) {
           </Box>
         )}
       </Box>
+      {console.log('Inside return')}
     </Container>
   )
 }

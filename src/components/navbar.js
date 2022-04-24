@@ -55,6 +55,7 @@ export default function Navbar() {
       alignItems="center"
       justifyContent="space-between"
       width="100%"
+      backgroundColor="#111111"
     >
       <Box className="nav-left" d="flex">
         <Link>
